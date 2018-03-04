@@ -4,11 +4,11 @@ namespace  MarketPlace.Api.Entities
 {
     public class UsersController
     {
-        private MarketplaceContext @object;
+        private MarketplaceContext context;
 
         public UsersController(MarketplaceContext @object)
         {
-            this.@object = @object;
+            this.context = @object;
         }
 
         public object QueryUsers()
