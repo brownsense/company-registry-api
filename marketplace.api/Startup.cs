@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using marketplace.api.Data;
+using marketplace.api.Security;
 using Marketplace.Api.Security;
+using MarketPlace.Api.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -46,6 +51,9 @@ namespace marketplace.api
 
             // register the scope authorization handler
             services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
+            services.AddTransient<AuthorizationService>(r => new TokenAuthorizationService());
+            services.AddSingleton<MarketplaceContext>();
+            services.AddSingleton<QueryHelper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

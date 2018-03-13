@@ -19,5 +19,16 @@ namespace marketplace.api.test
             mockSet.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(fakeTransactions.GetEnumerator());
             return mockSet.Object;
         }
+
+        public static Mock<DbSet<T>> ToDbSetMock<T>(this IEnumerable<T> data) where T : class
+        {
+            var fakeTransactions = data.AsQueryable();
+            var mockSet = new Mock<DbSet<T>>();
+            mockSet.As<IQueryable<T>>().Setup(m => m.Provider).Returns(fakeTransactions.Provider);
+            mockSet.As<IQueryable<T>>().Setup(m => m.Expression).Returns(fakeTransactions.Expression);
+            mockSet.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(fakeTransactions.ElementType);
+            mockSet.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(fakeTransactions.GetEnumerator());
+            return mockSet;
+        }
     }
 }

@@ -6,6 +6,8 @@ using System.Linq;
 
 namespace  MarketPlace.Api.Entities
 {
+    [Produces("application/json")]
+    [Route("api/entities")]
     public class EntitiesController : Controller
     {
         private readonly MarketplaceContext context;
@@ -21,12 +23,14 @@ namespace  MarketPlace.Api.Entities
             this.queryHelper = queryHelper;
         }
 
+        [HttpGet]
         public ActionResult QueryEntities()
         {
             var theReturn = queryHelper.Query(context.Entities, 10, 0, (a) => true);
             return Json(theReturn);
         }
 
+        [HttpPost]
         public ActionResult CreateEntity(Entity entity)
         {
             if(!ModelState.IsValid)
@@ -38,19 +42,21 @@ namespace  MarketPlace.Api.Entities
             return Created("", entity);
         }
 
-        public ActionResult GetEntity(int targetId)
+        [HttpGet("{entityId}")]
+        public ActionResult GetEntity(int entityId)
         {
-            var response = context.Entities.SingleOrDefault(r => r.Id == targetId);
+            var response = context.Entities.SingleOrDefault(r => r.Id == entityId);
             var theReturn = response == null ? NotFound() as ActionResult : Json(response);
             return theReturn;
         }
 
-        public ActionResult UpdateEntity(int id, Entity update)
+        [HttpPut("{entityId}")]
+        public ActionResult UpdateEntity(int entityId, Entity update)
         {
-            var foundEntity = context.Entities.SingleOrDefault(r => r.Id == id);
+            var foundEntity = context.Entities.SingleOrDefault(r => r.Id == entityId);
             if(foundEntity == null)
             {
-                return NotFound(id);
+                return NotFound(entityId);
             }
             else
             {
@@ -62,12 +68,13 @@ namespace  MarketPlace.Api.Entities
             }
         }
 
-        public ActionResult DeleteEntity(int id)
+        [HttpDelete("{entityId}")]
+        public ActionResult DeleteEntity(int entityId)
         {
-            var foundEntity = context.Entities.SingleOrDefault(r => r.Id == id);
+            var foundEntity = context.Entities.SingleOrDefault(r => r.Id == entityId);
             if (foundEntity == null)
             {
-                return NotFound(id);
+                return NotFound(entityId);
             }
             else
             {

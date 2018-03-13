@@ -9,6 +9,7 @@ using System.Linq;
 using System;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using marketplace.api.Security;
 
 namespace MarketPlace.Api.Entities.Test
 {
@@ -36,7 +37,7 @@ namespace MarketPlace.Api.Entities.Test
         {
             var fakeResults = Enumerable.Range(0, 100)
                 .Select(id => new Entity { Id = id });
-            authorizationServiceMock.Setup(r => r.HasRole("entity-admin")).Returns(false);
+            authorizationServiceMock.Setup(r => r.HasRole(It.IsAny<int>(), EntityRole.Owner)).Returns(false);
             contextMock.SetupGet(r => r.Entities).Returns(fakeResults.ToDbSet());
             var fakeReturn = new PagedList<Entity>();
             queryHelperMock.Setup(r => r.Query(It.IsAny<IQueryable<Entity>>(), 10, 0, It.IsAny<Expression<Func<Entity, bool>>>())).Returns(fakeReturn);

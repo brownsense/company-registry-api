@@ -1,5 +1,6 @@
 ﻿using marketplace.api.Data;
 using marketplace.api.Products;
+using marketplace.api.Security;
 using Marketplace.Api.Security;
 using MarketPlace.Api.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -43,7 +44,7 @@ namespace marketplace.api.test
             var fakeEntityId = 2;
             var fakeProduct = new Product { };
             var productSetMock = new Mock<DbSet<Product>>();
-            authorizationServiceMock.Setup(r => r.HasRole(fakeEntityId, "owner")).Returns(true);
+            authorizationServiceMock.Setup(r => r.HasRole(fakeEntityId, EntityRole.Owner)).Returns(true);
             contextMock.SetupGet(r => r.Products).Returns(productSetMock.Object);
 
             var result = productsController.AddProduct(fakeEntityId, fakeProduct);
@@ -58,7 +59,7 @@ namespace marketplace.api.test
         {
             var fakeEntityId = 2;
             var fakeProduct = new Product { };
-            authorizationServiceMock.Setup(r => r.HasRole(fakeEntityId, "owner")).Returns(false);
+            authorizationServiceMock.Setup(r => r.HasRole(fakeEntityId, EntityRole.Owner)).Returns(false);
 
             var result = productsController.AddProduct(fakeEntityId, fakeProduct);
 
@@ -70,7 +71,7 @@ namespace marketplace.api.test
         {
             var fakeEntityId = 2;
             var invalidProduct = new Product { };
-            authorizationServiceMock.Setup(r => r.HasRole(It.IsAny<int>(), "owner")).Returns(true);
+            authorizationServiceMock.Setup(r => r.HasRole(It.IsAny<int>(), EntityRole.Owner)).Returns(true);
             productsController.ModelState.AddModelError("Id", "invalid bla bla");
 
             var result = productsController.AddProduct(fakeEntityId, invalidProduct);
@@ -142,7 +143,7 @@ namespace marketplace.api.test
             var fakeProducts = Enumerable.Range(0, 200)
                 .Select(id => id == 1 ? fakeProduct : new Product { Id = id });
             contextMock.SetupGet(r => r.Products).Returns(fakeProducts.ToDbSet());
-            authorizationServiceMock.Setup(r => r.HasRole(entityId, "owner")).Returns(true);
+            authorizationServiceMock.Setup(r => r.HasRole(entityId, EntityRole.Owner)).Returns(true);
 
             var response = productsController.UpdateProduct(1, update);
 
@@ -168,7 +169,7 @@ namespace marketplace.api.test
             var fakeProducts = Enumerable.Range(0, 200)
                 .Select(id => id == 1 ? fakeProduct : new Product { Id = id });
             contextMock.SetupGet(r => r.Products).Returns(fakeProducts.ToDbSet());
-            authorizationServiceMock.Setup(r => r.HasRole(entityId, "owner")).Returns(false);
+            authorizationServiceMock.Setup(r => r.HasRole(entityId, EntityRole.Owner)).Returns(false);
 
             var response = productsController.UpdateProduct(1, update);
 
@@ -205,7 +206,7 @@ namespace marketplace.api.test
             var fakeProducts = Enumerable.Range(0, 200)
                 .Select(id => id == 1 ? fakeProduct : new Product { Id = id });
             contextMock.SetupGet(r => r.Products).Returns(fakeProducts.ToDbSet());
-            authorizationServiceMock.Setup(r => r.HasRole("admin")).Returns(true);
+            authorizationServiceMock.Setup(r => r.HasRole(GlobalRole.Admin)).Returns(true);
 
             var response = productsController.DeleteProduct(1);
 
@@ -222,7 +223,7 @@ namespace marketplace.api.test
             var fakeProducts = Enumerable.Range(0, 200)
                 .Select(id => id == 1 ? fakeProduct : new Product { Id = id });
             contextMock.SetupGet(r => r.Products).Returns(fakeProducts.ToDbSet());
-            authorizationServiceMock.Setup(r => r.HasRole(entityId, "owner")).Returns(true);
+            authorizationServiceMock.Setup(r => r.HasRole(entityId, EntityRole.Owner)).Returns(true);
 
             var response = productsController.DeleteProduct(1);
 
@@ -239,7 +240,7 @@ namespace marketplace.api.test
             var fakeProducts = Enumerable.Range(0, 200)
                 .Select(id => id == 1 ? fakeProduct : new Product { Id = id });
             contextMock.SetupGet(r => r.Products).Returns(fakeProducts.ToDbSet());
-            authorizationServiceMock.Setup(r => r.HasRole(entityId, "owner")).Returns(false);
+            authorizationServiceMock.Setup(r => r.HasRole(entityId, EntityRole.Owner)).Returns(false);
 
             var response = productsController.DeleteProduct(1);
 

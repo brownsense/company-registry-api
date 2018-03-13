@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using marketplace.api.Data;
+using marketplace.api.Security;
 using Marketplace.Api.Security;
 using MarketPlace.Api.Entities;
 using Microsoft.AspNetCore.Http;
@@ -28,7 +29,7 @@ namespace marketplace.api.Products
         [HttpPost("~/api/entities/{entityId}/products")]
         public ActionResult AddProduct(int entityId, Product product)
         {
-            if(!authorizationService.HasRole(entityId, "owner"))
+            if(!authorizationService.HasRole(entityId, EntityRole.Owner))
             {
                 return Unauthorized();
             }
@@ -68,7 +69,7 @@ namespace marketplace.api.Products
             {
                 return NotFound();
             }
-            if(!authorizationService.HasRole(savedProduct.EntityId, "owner"))
+            if(!authorizationService.HasRole(savedProduct.EntityId, EntityRole.Owner))
             {
                 return Unauthorized();
             }
@@ -89,7 +90,7 @@ namespace marketplace.api.Products
                 throw new Exception("Product not found");
             }
 
-            if (!authorizationService.HasRole("admin") && !authorizationService.HasRole(foundProduct.EntityId, "owner"))
+            if (!authorizationService.HasRole(GlobalRole.Admin) && !authorizationService.HasRole(foundProduct.EntityId, EntityRole.Owner))
             {
                 return Unauthorized();
             }

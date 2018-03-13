@@ -1,8 +1,11 @@
+using marketplace.api.Security;
+
 namespace Marketplace.Api.Security
 {
     public interface AuthorizationService
     {
-        bool HasRole(string v);
-        bool HasRole(int fakeEntityId, string v);
+        bool HasRole(GlobalRole role);
+        bool HasRole(int entityId, EntityRole role);
+        int GetUserId();
     }
 }

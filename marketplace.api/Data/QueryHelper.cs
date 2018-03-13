@@ -16,7 +16,7 @@ namespace marketplace.api.Data
                 Count = count,
                 Items = allResults.Skip(itemsPerPage * page).Take(itemsPerPage),
                 Page = page,
-                Pages = (int)Math.Ceiling((double)(count / page))
+                Pages = (int)Math.Ceiling((double)(count / (page + 1)))
             };
         }
     }
