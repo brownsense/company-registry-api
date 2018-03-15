@@ -1,5 +1,6 @@
 using marketplace.api.Gallery;
 using marketplace.api.Products;
+using marketplace.api.Recommendations;
 using marketplace.api.RedFlags;
 using marketplace.api.Users;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ namespace  MarketPlace.Api.Entities
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<RedFlag> RedFlags { get; set; }
+        public virtual DbSet<Rating> Ratings { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
